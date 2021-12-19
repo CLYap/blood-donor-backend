@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -37,17 +36,6 @@ public class AppUserController {
 
 	public AppUserController(AppUserService appUserService) {
 		this.appUserService = appUserService;
-	}
-
-	@GetMapping("/users")
-	public ResponseEntity<List<AppUser>> getUsers() {
-		return ResponseEntity.ok().body(appUserService.getUsers());
-	}
-
-	@PostMapping("/user/save")
-	public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-		return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
 	}
 
 	@PostMapping("/role/save")

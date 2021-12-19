@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import apu.tp055004.bdms.model.AppUser;
@@ -23,7 +22,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 	
 	private final AppUserRepo appUserRepo;
 	private final RoleRepo roleRepo;
-	private final PasswordEncoder passwordEncoder;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,9 +42,8 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 	@Override
 	public AppUser saveUser(AppUser appUser) {
 		System.out.println("Saving new user {} to the db" + appUser.getUsername());
-		appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
 		return appUserRepo.save(appUser);
-	}
+	}	
 
 	@Override
 	public Role saveRole(Role role) {
@@ -74,9 +71,8 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 		return appUserRepo.findAll();
 	}
 
-	public AppUserServiceImpl(AppUserRepo appUserRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder) {
+	public AppUserServiceImpl(AppUserRepo appUserRepo, RoleRepo roleRepo) {
 		this.appUserRepo = appUserRepo;
 		this.roleRepo = roleRepo;
-		this.passwordEncoder = passwordEncoder;
 	}
 }
