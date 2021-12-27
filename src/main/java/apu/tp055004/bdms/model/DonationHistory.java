@@ -2,21 +2,32 @@ package apu.tp055004.bdms.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 public class DonationHistory {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "donationHistoryId_generator")
+	@GenericGenerator(name="donationHistoryId_generator", strategy="apu.tp055004.bdms.model.CustomIdGenerator", parameters= {
+			@Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
+			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "DH"),
+			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
+	})
 	private String donationHistoryId;
 	private String date;
 	private String time;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_donorId")
 	private Donor donor;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_staffId")
 	private Staff staff;
 	private String bP;
@@ -27,9 +38,8 @@ public class DonationHistory {
 	
 	public DonationHistory() {}
 		
-	public DonationHistory(String donationHistoryId, String date, String time, Donor donor, Staff staff, String bP,
+	public DonationHistory(String date, String time, Donor donor, Staff staff, String bP,
 			int haemoglobinCount, int pulse, int bloodUnit, String covidAntibody) {
-		this.donationHistoryId = donationHistoryId;
 		this.date = date;
 		this.time = time;
 		this.donor = donor;

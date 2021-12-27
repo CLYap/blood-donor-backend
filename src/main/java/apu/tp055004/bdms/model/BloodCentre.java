@@ -5,11 +5,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 @Entity
 public class BloodCentre {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long bloodCentreId;
+	@Id 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bloodCentreId_generator")
+	@GenericGenerator(name="bloodCentreId_generator", strategy="apu.tp055004.bdms.model.CustomIdGenerator", parameters= {
+			@Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
+			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "BC"),
+			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
+	})
+	private String bloodCentreId;
 	private String bloodCentreName;
 	private String bloodCentreAddress;
 	private String latitude;
@@ -17,19 +26,18 @@ public class BloodCentre {
 	
 	public BloodCentre() {}
 
-	public BloodCentre(Long bloodCentreId, String bloodCentreName, String bloodCentreAddress, String latitude, String longitude) {
-		this.bloodCentreId = bloodCentreId;
+	public BloodCentre(String bloodCentreName, String bloodCentreAddress, String latitude, String longitude) {
 		this.bloodCentreName = bloodCentreName;
 		this.bloodCentreAddress = bloodCentreAddress;
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
 
-	public Long getBloodCentreId() {
+	public String getBloodCentreId() {
 		return bloodCentreId;
 	}
 
-	public void setBloodCentreId(Long bloodCentreId) {
+	public void setBloodCentreId(String bloodCentreId) {
 		this.bloodCentreId = bloodCentreId;
 	}
 

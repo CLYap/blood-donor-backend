@@ -7,6 +7,6 @@ import apu.tp055004.bdms.model.BloodCentre;
 public interface BloodCentreService {
 	
 	public BloodCentre saveBloodCentre(BloodCentre bloodCentre);
-	public BloodCentre getBloodCentre(Long bloodCentreId);
+	public BloodCentre getBloodCentre(String bloodCentreId);
 	public List<BloodCentre> getBloodCentres();
 }

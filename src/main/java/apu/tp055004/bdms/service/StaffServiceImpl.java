@@ -15,17 +15,13 @@ import apu.tp055004.bdms.repo.StaffRepo;
 public class StaffServiceImpl implements StaffService {
 	
 	private final StaffRepo staffRepo;
-	private final PasswordEncoder passwordEncoder;
 	
-	public StaffServiceImpl(StaffRepo staffRepo, PasswordEncoder passwordEncoder) {
+	public StaffServiceImpl(StaffRepo staffRepo) {
 		this.staffRepo = staffRepo;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public Staff saveStaff(Staff staff) {
-		AppUser appUser = staff.getAppUser();
-		appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
 		return staffRepo.save(staff);
 	}
 

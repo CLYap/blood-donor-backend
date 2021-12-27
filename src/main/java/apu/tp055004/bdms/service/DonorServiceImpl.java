@@ -1,5 +1,6 @@
 package apu.tp055004.bdms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,23 +10,20 @@ import org.springframework.stereotype.Service;
 
 import apu.tp055004.bdms.model.AppUser;
 import apu.tp055004.bdms.model.Donor;
+import apu.tp055004.bdms.model.MedicalHistory;
 import apu.tp055004.bdms.repo.DonorRepo;
 
 @Service @Transactional
 public class DonorServiceImpl implements DonorService {
 	
 	private final DonorRepo donorRepo;
-	private final PasswordEncoder passwordEncoder;
 	
-	public DonorServiceImpl(DonorRepo donorRepo, PasswordEncoder passwordEncoder) {
+	public DonorServiceImpl(DonorRepo donorRepo) {
 		this.donorRepo = donorRepo;
-		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@Override
 	public Donor saveDonor(Donor donor) {
-		AppUser appUser = donor.getAppUser();
-		appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
 		return donorRepo.save(donor);
 	}
 	
@@ -37,5 +35,25 @@ public class DonorServiceImpl implements DonorService {
 	@Override
 	public List<Donor> getDonors() {
 		return donorRepo.findAll();
+	}
+
+	@Override
+	public Donor updateDonor(Donor donor) {
+		Donor existingDonor = donorRepo.findByDonorId(donor.getDonorId().trim());
+		existingDonor.setDob(donor.getDob());
+		existingDonor.setGender(donor.getGender());
+		existingDonor.setAddressFLine(donor.getAddressFLine());
+		existingDonor.setAddressSLine(donor.getAddressSLine());
+		existingDonor.setCity(donor.getCity());
+		existingDonor.setState(donor.getState());
+		existingDonor.setPostcode(donor.getPostcode());
+		existingDonor.setContactNo(donor.getContactNo());
+		existingDonor.setEmail(donor.getEmail());
+		existingDonor.setMedicalHistory(new ArrayList<MedicalHistory>());
+		existingDonor.setMedicalHistory(donor.getMedicalHistory());
+		existingDonor.setAllergy(donor.getAllergy());
+		existingDonor.setWeight(donor.getWeight());
+		existingDonor.setHeight(donor.getHeight());
+		return donorRepo.save(existingDonor);
 	}
 }

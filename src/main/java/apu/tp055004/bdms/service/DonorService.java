@@ -9,4 +9,5 @@ public interface DonorService {
 	public Donor saveDonor(Donor donor);
 	public Donor getDonor(String donorId);
 	public List<Donor> getDonors();
+	public Donor updateDonor(Donor donor);
 }

@@ -24,7 +24,7 @@ public class BloodCentreServiceImpl implements BloodCentreService {
 	}
 
 	@Override
-	public BloodCentre getBloodCentre(Long bloodCentreId) {
+	public BloodCentre getBloodCentre(String bloodCentreId) {
 		return bloodCentreRepo.findByBloodCentreId(bloodCentreId);
 	}
 

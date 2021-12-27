@@ -4,15 +4,28 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 public class Donor {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "donorId_generator")
+	@GenericGenerator(name="donorId_generator", strategy="apu.tp055004.bdms.model.CustomIdGenerator", parameters= {
+			@Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
+			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "D"),
+			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
+	})
 	private String donorId;
 	private String lName;
 	private String fName;
@@ -35,17 +48,15 @@ public class Donor {
 	private String contactNo;
 	private String email;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_userId")
 	private AppUser appUser;
 
 	public Donor() {}
 
-	public Donor(String donorId, String lName, String fName, String gender, String dob, String addressFLine,
+	public Donor(String lName, String fName, String gender, String dob, String addressFLine,
 			String addressSLine, String city, String state, String postcode, String bloodType, int weight, int height,
-			List<MedicalHistory> medicalHistory, List<Allergy> allergy, String contactNo, String email,
-			AppUser appUser) {
-		this.donorId = donorId;
+			List<MedicalHistory> medicalHistory, List<Allergy> allergy, String contactNo, String email, AppUser appUser) {
 		this.lName = lName;
 		this.fName = fName;
 		this.gender = gender;
@@ -208,5 +219,7 @@ public class Donor {
 	public void setAppUser(AppUser appUser) {
 		this.appUser = appUser;
 	}
+	
+	
 }
 

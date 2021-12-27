@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,12 @@ public class AppUserController {
 
 	public AppUserController(AppUserService appUserService) {
 		this.appUserService = appUserService;
+	}
+	
+	@PostMapping("/create/user/account")
+	public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/create/account").toUriString());
+		return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
 	}
 
 	@PostMapping("/role/save")

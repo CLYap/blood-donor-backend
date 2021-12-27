@@ -2,9 +2,11 @@ package apu.tp055004.bdms.api;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,4 +54,13 @@ public class DonationHistoryController {
 	public ResponseEntity<List<DonationHistory>> getDonations() {
 		return ResponseEntity.ok().body(donationHistoryService.getDonationHistories());
 	}
+	
+	@GetMapping("/donations/{donorId}")
+	public ResponseEntity<List<DonationHistory>> getDonationsByDonorId(@PathVariable String donorId) {
+		List<DonationHistory> donationHistories = donationHistoryService.getDonationHistories().
+				stream().filter(e -> e.getDonor().getDonorId().equalsIgnoreCase(donorId.trim())).collect(Collectors.toList());
+		donationHistories.forEach(e -> System.out.println(e));
+		return ResponseEntity.ok().body(donationHistories);
+	}
+	
 }

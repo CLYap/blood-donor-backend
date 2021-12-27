@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import apu.tp055004.bdms.model.BloodCentre;
 
 @Repository
-public interface BloodCentreRepo extends JpaRepository<BloodCentre, Long> {
-	BloodCentre findByBloodCentreId(Long bloodCentreId); 
+public interface BloodCentreRepo extends JpaRepository<BloodCentre, String> {
+	BloodCentre findByBloodCentreId(String bloodCentreId); 
 }
