@@ -1,22 +1,26 @@
 package apu.tp055004.bdms.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
+@Table(name = "DONOR_T")
 public class Donor {
 	
 	@Id
@@ -26,26 +30,38 @@ public class Donor {
 			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "D"),
 			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
 	})
+	@Column(name = "donor_id")
 	private String donorId;
+	@Column(name = "donor_lname")
 	private String lName;
+	@Column(name = "donor_fname")
 	private String fName;
+	@Column(name = "donor_gender")
 	private String gender;
-	private String dob;
+	@Column(name = "donor_dob")
+	@Temporal(TemporalType.DATE)
+	private Date dob;
+	@Column(name = "donor_addressFLine")
 	private String addressFLine;
+	@Column(name = "donor_addressSLine")
 	private String addressSLine;
+	@Column(name = "donor_city")
 	private String city;
+	@Column(name = "donor_state")
 	private String state;
+	@Column(name = "donor_postcode")
 	private String postcode;
+	@Column(name = "donor_bloodtype")
 	private String bloodType;
+	@Column(name = "donor_weight")
 	private int weight;
+	@Column(name = "donor_height")
 	private int height;
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="fk_donorId", referencedColumnName = "donorId")
-	private List<MedicalHistory> medicalHistory;
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="fk_donorId", referencedColumnName = "donorId")
-	private List<Allergy> allergy;
+	private String medicalHistory;
+	private String allergy;
+	@Column(name = "donor_contactno")
 	private String contactNo;
+	@Column(name = "donor_email")
 	private String email;
 	
 	@OneToOne(cascade = CascadeType.MERGE)
@@ -54,9 +70,9 @@ public class Donor {
 
 	public Donor() {}
 
-	public Donor(String lName, String fName, String gender, String dob, String addressFLine,
-			String addressSLine, String city, String state, String postcode, String bloodType, int weight, int height,
-			List<MedicalHistory> medicalHistory, List<Allergy> allergy, String contactNo, String email, AppUser appUser) {
+	public Donor(String lName, String fName, String gender, Date dob, String addressFLine, String addressSLine,
+			String city, String state, String postcode, String bloodType, int weight, int height, String medicalHistory,
+			String allergy, String contactNo, String email, AppUser appUser) {
 		this.lName = lName;
 		this.fName = fName;
 		this.gender = gender;
@@ -75,7 +91,7 @@ public class Donor {
 		this.email = email;
 		this.appUser = appUser;
 	}
-	
+
 	public String getDonorId() {
 		return donorId;
 	}
@@ -108,11 +124,11 @@ public class Donor {
 		this.gender = gender;
 	}
 
-	public String getDob() {
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(String dob) {
+	public void setDob(Date dob) {
 		this.dob = dob;
 	}
 
@@ -180,19 +196,19 @@ public class Donor {
 		this.height = height;
 	}
 
-	public List<MedicalHistory> getMedicalHistory() {
+	public String getMedicalHistory() {
 		return medicalHistory;
 	}
 
-	public void setMedicalHistory(List<MedicalHistory> medicalHistory) {
+	public void setMedicalHistory(String medicalHistory) {
 		this.medicalHistory = medicalHistory;
 	}
 
-	public List<Allergy> getAllergy() {
+	public String getAllergy() {
 		return allergy;
 	}
 
-	public void setAllergy(List<Allergy> allergy) {
+	public void setAllergy(String allergy) {
 		this.allergy = allergy;
 	}
 
@@ -219,7 +235,5 @@ public class Donor {
 	public void setAppUser(AppUser appUser) {
 		this.appUser = appUser;
 	}
-	
-	
 }
 

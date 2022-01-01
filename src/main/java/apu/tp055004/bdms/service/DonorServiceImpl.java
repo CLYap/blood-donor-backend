@@ -1,16 +1,12 @@
 package apu.tp055004.bdms.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import apu.tp055004.bdms.model.AppUser;
 import apu.tp055004.bdms.model.Donor;
-import apu.tp055004.bdms.model.MedicalHistory;
 import apu.tp055004.bdms.repo.DonorRepo;
 
 @Service @Transactional
@@ -49,7 +45,6 @@ public class DonorServiceImpl implements DonorService {
 		existingDonor.setPostcode(donor.getPostcode());
 		existingDonor.setContactNo(donor.getContactNo());
 		existingDonor.setEmail(donor.getEmail());
-		existingDonor.setMedicalHistory(new ArrayList<MedicalHistory>());
 		existingDonor.setMedicalHistory(donor.getMedicalHistory());
 		existingDonor.setAllergy(donor.getAllergy());
 		existingDonor.setWeight(donor.getWeight());

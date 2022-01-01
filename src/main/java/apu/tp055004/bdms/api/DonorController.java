@@ -30,10 +30,10 @@ public class DonorController {
 		this.appUserService = appUserService;
 	}
 	
-	@PostMapping("/create/user/donor")
-	public ResponseEntity<Donor> saveDonor(@RequestBody Donor donor) {
+	@PostMapping("/create/user/donor/{username}")
+	public ResponseEntity<Donor> saveDonor(@PathVariable String username, @RequestBody Donor donor) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/create/user/donor").toUriString());
-		AppUser appUser = appUserService.getUser(donor.getAppUser().getUsername());
+		AppUser appUser = appUserService.getUser(username);
 		if(appUser != null ) {
 			donor.setAppUser(appUser);
 			return ResponseEntity.created(uri).body(donorService.saveDonor(donor));
@@ -52,12 +52,7 @@ public class DonorController {
 		return ResponseEntity.ok(donorService.updateDonor(donor));
 	}
 	
-	@GetMapping("/user/profile/donor/{donorId}")	//used by blood centre staffs
-	public ResponseEntity<Donor> getDonor(@PathVariable String donorId) {
-		return ResponseEntity.ok().body(donorService.getDonor(donorId.trim()));
-	}
-	
-	@GetMapping("/user/profile/own/donor/{appUserId}")		//used by the donor 
+	@GetMapping("/user/profile/donor/{appUserId}")		//used by the donor 
 	public ResponseEntity<Donor> getOwnDonor(@PathVariable String appUserId) {
 		Donor donor = donorService.getDonors().stream()
 				.filter(e -> e.getAppUser().getUsername()

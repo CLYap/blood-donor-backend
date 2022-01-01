@@ -1,14 +1,17 @@
 package apu.tp055004.bdms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
+@Table(name="BLOOD_CENTRE_T")
 public class BloodCentre {
 	
 	@Id 
@@ -18,15 +21,21 @@ public class BloodCentre {
 			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "BC"),
 			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
 	})
+	@Column(name="bc_id")
 	private String bloodCentreId;
+	@Column(name="bc_name")
 	private String bloodCentreName;
+	@Column(name="bc_address")
 	private String bloodCentreAddress;
-	private String latitude;
-	private String longitude;
+	@Column(name="bc_latitude")
+	private double latitude;
+	@Column(name="bc_longitude")
+	private double longitude;
 	
 	public BloodCentre() {}
 
-	public BloodCentre(String bloodCentreName, String bloodCentreAddress, String latitude, String longitude) {
+	public BloodCentre(String bloodCentreName, String bloodCentreAddress, double latitude,
+			double longitude) {
 		this.bloodCentreName = bloodCentreName;
 		this.bloodCentreAddress = bloodCentreAddress;
 		this.latitude = latitude;
@@ -57,19 +66,19 @@ public class BloodCentre {
 		this.bloodCentreAddress = bloodCentreAddress;
 	}
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
-	}	
+	}
 }

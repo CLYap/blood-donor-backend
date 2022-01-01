@@ -35,10 +35,10 @@ public class StaffController {
 		this.appUserService = appUserService;
 	}
 	
-	@PostMapping("/create/user/staff")
-	public ResponseEntity<Staff> saveUser(@RequestBody Staff staff) {
-		AppUser appUser = appUserService.getUser(staff.getAppUser().getUsername());
-		BloodCentre bloodCentre = bloodCentreService.getBloodCentre(staff.getBloodCentre().getBloodCentreId());
+	@PostMapping("/create/user/staff/{bloodCentreId}/{username}")
+	public ResponseEntity<Staff> saveUser(@PathVariable String bloodCentreId, @PathVariable String username, @RequestBody Staff staff) {
+		AppUser appUser = appUserService.getUser(username);
+		BloodCentre bloodCentre = bloodCentreService.getBloodCentre(bloodCentreId);
 		if(appUser != null && bloodCentre != null) {
 			staff.setAppUser(appUser);
 			staff.setBloodCentre(bloodCentre);

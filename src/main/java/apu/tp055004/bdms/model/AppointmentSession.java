@@ -1,8 +1,10 @@
 package apu.tp055004.bdms.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,11 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
+@Table(name= "APPOINTMENT_SESSION_T")
 public class AppointmentSession {
 	
 	@Id
@@ -24,28 +32,36 @@ public class AppointmentSession {
 			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "AS"),
 			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
 	})
+	@Column(name = "apptSess_id")
 	private String appointmentSessionId;
-	private String date;
-	private String startTime;
-	private String endTime;
+	@Column(name = "apptSess_date")
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	@Column(name = "apptSess_start_time")
+	@Temporal(TemporalType.TIME)
+	private Date startTime;
+	@Column(name = "apptSess_end_time")
+	@Temporal(TemporalType.TIME)
+	private Date endTime;
 	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_bloodCentreId")
 	private BloodCentre bloodCentre;
-	@OneToMany(mappedBy = "appointmentSession")
+	@JsonManagedReference
+	@OneToMany(mappedBy = "appointmentSession", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AppointmentRequest> appointmentRequests;
-	private int availableSlot;
-	
+	@Column(name = "apptSess_slot")
+	private int slot;
+	 
 	public AppointmentSession() {}
 
-	public AppointmentSession(String appointmentSessionId, String date, String startTime, String endTime,
-			BloodCentre bloodCentre, List<AppointmentRequest> appointmentRequests, int availableSlot) {
-		this.appointmentSessionId = appointmentSessionId;
+	public AppointmentSession(Date date, Date startTime, Date endTime, BloodCentre bloodCentre,
+			List<AppointmentRequest> appointmentRequests, int slot) {
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.bloodCentre = bloodCentre;
 		this.appointmentRequests = appointmentRequests;
-		this.availableSlot = availableSlot;
+		this.slot = slot;
 	}
 
 	public String getAppointmentSessionId() {
@@ -56,27 +72,27 @@ public class AppointmentSession {
 		this.appointmentSessionId = appointmentSessionId;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	public String getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public String getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 
@@ -87,7 +103,7 @@ public class AppointmentSession {
 	public void setBloodCentre(BloodCentre bloodCentre) {
 		this.bloodCentre = bloodCentre;
 	}
-	
+
 	public List<AppointmentRequest> getAppointmentRequests() {
 		return appointmentRequests;
 	}
@@ -96,11 +112,11 @@ public class AppointmentSession {
 		this.appointmentRequests = appointmentRequests;
 	}
 
-	public int getAvailableSlot() {
-		return availableSlot;
+	public int getSlot() {
+		return slot;
 	}
 
-	public void setAvailableSlot(int availableSlot) {
-		this.availableSlot = availableSlot;
+	public void setSlot(int slot) {
+		this.slot = slot;
 	}
 }

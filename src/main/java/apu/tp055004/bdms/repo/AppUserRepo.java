@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import apu.tp055004.bdms.model.AppUser;
 
 @Repository
-public interface AppUserRepo extends JpaRepository<AppUser, String>{
+public interface AppUserRepo extends JpaRepository<AppUser, String> {
 	AppUser findByUsername(String username);
 }

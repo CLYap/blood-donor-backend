@@ -1,18 +1,24 @@
 package apu.tp055004.bdms.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
+@Table(name= "APPOINTMENT_REQUEST_T")
 public class AppointmentRequest {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointmentRequestId_generator")
@@ -21,11 +27,14 @@ public class AppointmentRequest {
 			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "AR"),
 			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
 	})
+	@Column(name="appt_req_id")
 	private String appointmentRequestId;
 	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_donorId")
 	private Donor donor;
-	@ManyToOne
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="fk_appt_sess_id", nullable=false)
 	private AppointmentSession appointmentSession;
 	
 	public AppointmentRequest() {}
@@ -57,5 +66,5 @@ public class AppointmentRequest {
 	
 	public void setAppointmentSession(AppointmentSession appointmentSession) {
 		this.appointmentSession = appointmentSession;
-	}	
+	}
 }

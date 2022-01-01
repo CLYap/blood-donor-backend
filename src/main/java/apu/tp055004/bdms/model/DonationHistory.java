@@ -1,17 +1,24 @@
 package apu.tp055004.bdms.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
+@Table(name = "DONATION_HISTORY_T")
 public class DonationHistory {
 
 	@Id
@@ -21,25 +28,37 @@ public class DonationHistory {
 			@Parameter(name = CustomIdGenerator.PREFIX_PARAMETER, value = "DH"),
 			@Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d"),
 	})
+	@Column(name = "dh_id")
 	private String donationHistoryId;
-	private String date;
-	private String time;
+	
+	@Column(name = "dh_date")
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	@Column(name = "dh_time")
+	@Temporal(TemporalType.TIME)
+	private Date time;
 	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_donorId")
 	private Donor donor;
 	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="fk_staffId")
 	private Staff staff;
+	@Column(name = "dh_bP")
 	private String bP;
-	private int haemoglobinCount;
+	@Column(name = "dh_haemoglobin_count")
+	private double haemoglobinCount;
+	@Column(name = "dh_pulse")
 	private int pulse;
+	@Column(name = "dh_bloodUnit")
 	private int bloodUnit;
+	@Column(name = "dh_covidAntibody")
 	private String covidAntibody;
 	
 	public DonationHistory() {}
 		
-	public DonationHistory(String date, String time, Donor donor, Staff staff, String bP,
-			int haemoglobinCount, int pulse, int bloodUnit, String covidAntibody) {
+	public DonationHistory(Date date, Date time, Donor donor, Staff staff, String bP, double haemoglobinCount,
+			int pulse, int bloodUnit, String covidAntibody) {
+		super();
 		this.date = date;
 		this.time = time;
 		this.donor = donor;
@@ -50,7 +69,7 @@ public class DonationHistory {
 		this.bloodUnit = bloodUnit;
 		this.covidAntibody = covidAntibody;
 	}
-
+	
 	public String getDonationHistoryId() {
 		return donationHistoryId;
 	}
@@ -59,22 +78,22 @@ public class DonationHistory {
 		this.donationHistoryId = donationHistoryId;
 	}
 	
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
-	
-	public void setDate(String date) {
+
+	public void setDate(Date date) {
 		this.date = date;
 	}
-	
-	public String getTime() {
+
+	public Date getTime() {
 		return time;
 	}
-	
-	public void setTime(String time) {
+
+	public void setTime(Date time) {
 		this.time = time;
 	}
-	
+
 	public Donor getDonor() {
 		return donor;
 	}
@@ -99,14 +118,14 @@ public class DonationHistory {
 		this.bP = bP;
 	}
 	
-	public int getHaemoglobinCount() {
+	public double getHaemoglobinCount() {
 		return haemoglobinCount;
 	}
-	
-	public void setHaemoglobinCount(int haemoglobinCount) {
+
+	public void setHaemoglobinCount(double haemoglobinCount) {
 		this.haemoglobinCount = haemoglobinCount;
 	}
-	
+
 	public int getPulse() {
 		return pulse;
 	}

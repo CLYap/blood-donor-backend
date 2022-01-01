@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ import apu.tp055004.bdms.service.AppUserService;
 @RequestMapping("/api")
 public class AppUserController {
 
+	@Autowired
 	private final AppUserService appUserService;
 
 	public AppUserController(AppUserService appUserService) {

@@ -49,7 +49,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 					filterChain.doFilter(request, response);
 				}catch (Exception exception) {
 					response.setHeader("error", exception.getMessage());
-					response.setStatus(403);
+					response.setStatus(401);
 					Map<String, String> error = new HashMap<>();
 					error.put("error_message", exception.getMessage());
 					response.setContentType("application/json");

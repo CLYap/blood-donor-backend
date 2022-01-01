@@ -35,19 +35,14 @@ public class DonationHistoryController {
 		this.staffService = staffService;
 	}
 
-	@PostMapping("/create/donation")
-	public ResponseEntity<DonationHistory> saveDonation(@RequestBody DonationHistory donationHistory) {
-		Donor donor = donorService.getDonor(donationHistory.getDonor().getDonorId());
-		Staff staff = staffService.getStaff(donationHistory.getStaff().getStaffId());
-		
-		if(donor != null && staff != null) {
-			donationHistory.setDonor(donor);
-			donationHistory.setStaff(staff);
-			URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/create/donation").toUriString());
-			return ResponseEntity.created(uri).body(donationHistoryService.saveDonationHistory(donationHistory));
-		} else {
-			return null;
-		}
+	@PostMapping("/create/donation/{staffId}/{donorId}")
+	public ResponseEntity<DonationHistory> saveDonation(@PathVariable String staffId, @PathVariable String donorId, @RequestBody DonationHistory donationHistory) {
+		Donor donor = donorService.getDonor(donorId);
+		Staff staff = staffService.getStaff(staffId);
+		donationHistory.setDonor(donor);
+		donationHistory.setStaff(staff);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/create/donation").toUriString());
+		return ResponseEntity.created(uri).body(donationHistoryService.saveDonationHistory(donationHistory));		
 	}
 	
 	@GetMapping("/donations")
@@ -59,7 +54,6 @@ public class DonationHistoryController {
 	public ResponseEntity<List<DonationHistory>> getDonationsByDonorId(@PathVariable String donorId) {
 		List<DonationHistory> donationHistories = donationHistoryService.getDonationHistories().
 				stream().filter(e -> e.getDonor().getDonorId().equalsIgnoreCase(donorId.trim())).collect(Collectors.toList());
-		donationHistories.forEach(e -> System.out.println(e));
 		return ResponseEntity.ok().body(donationHistories);
 	}
 	
