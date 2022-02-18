@@ -40,13 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().configurationSource(corsConfigurationSource());
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/user/profile/donor/{appUserId}", "/api/appointments/{bloodCentreId}").hasAnyAuthority("ROLE_NURSE", "ROLE_ADMIN", "ROLE_DONOR");
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/donors/**", "/api/donations/**", "/api/user/profile/donor/{donorId}", "/api/user/staff/profile").hasAnyAuthority("ROLE_NURSE", "ROLE_ADMIN");
+		http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**", "/api/reset/password").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/profile/donor/{appUserId}", "/api/donor/donations/{donorId}").hasAnyAuthority("ROLE_NURSE", "ROLE_ADMIN", "ROLE_DONOR");
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/donors/**", "/api/user/staff/profile", "/api/count/histories/**", "/api/donations", "/api/appointments/{bloodCentreId}").hasAnyAuthority("ROLE_NURSE", "ROLE_ADMIN");
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("ROLE_ADMIN");
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/bloodcentres", "/api/donor/latest/donation/{donorId}", "/api/appointment/latest/{donorId}", "/api/donor/appointments/{bloodCentreId}").hasAnyAuthority("ROLE_DONOR");
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/create/user/**", "/api/role/**", "/api/create/appointment/{bloodCentreId}").hasAnyAuthority("ROLE_ADMIN");
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/create/donation/**").hasAnyAuthority("ROLE_NURSE");
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/profile/own/donor/{appUserId}").hasAnyAuthority("ROLE_DONOR");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/update/profile/donor").hasAnyAuthority("ROLE_DONOR");
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/appointment/request/{appointmentSessionId}/{donorId}").hasAnyAuthority("ROLE_DONOR");
 		
@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

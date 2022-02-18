@@ -44,7 +44,7 @@ public class AppointmentSession {
 	@Temporal(TemporalType.TIME)
 	private Date endTime;
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name="fk_bloodCentreId")
+	@JoinColumn(name="fk_bc_id")
 	private BloodCentre bloodCentre;
 	@JsonManagedReference
 	@OneToMany(mappedBy = "appointmentSession", cascade = CascadeType.ALL, orphanRemoval = true)

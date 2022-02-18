@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import apu.tp055004.bdms.model.DonationHistory;
 import apu.tp055004.bdms.repo.DonationHistoryRepo;
+import apu.tp055004.bdms.repo.DonationHistoryRepo.MonthlyBloodTypeDonationRecord;
+import apu.tp055004.bdms.repo.DonationHistoryRepo.MonthlyBloodUnitDonationRecord;
+import apu.tp055004.bdms.repo.DonationHistoryRepo.MonthlyDonationRecord;
 
 @Service @Transactional
 public class DonationHistoryServiceImpl implements DonationHistoryService {
@@ -32,4 +35,21 @@ public class DonationHistoryServiceImpl implements DonationHistoryService {
 	public List<DonationHistory> getDonationHistories() {
 		return donationHistoryRepo.findAll();
 	}
+
+	@Override
+	public List<MonthlyDonationRecord> countHistories() {
+		return donationHistoryRepo.countHistories();
+	}
+
+	@Override
+	public List<MonthlyBloodTypeDonationRecord> countBloodTypes() {
+		return donationHistoryRepo.countBloodTypes();
+	}
+
+	@Override
+	public List<MonthlyBloodUnitDonationRecord> countBloodUnit() {
+		return donationHistoryRepo.countBloodUnit();
+	}
+	
+	
 }

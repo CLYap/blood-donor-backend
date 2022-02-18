@@ -1,8 +1,6 @@
 package apu.tp055004.bdms.api;
 
 import java.net.URI;
-import java.util.Collection;
-import java.util.stream.Collectors;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;

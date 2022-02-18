@@ -24,6 +24,12 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 	private final AppUserRepo appUserRepo;
 	private final RoleRepo roleRepo;
 	private final PasswordEncoder passwordEncoder;
+
+	public AppUserServiceImpl(AppUserRepo appUserRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder) {
+		this.appUserRepo = appUserRepo;
+		this.roleRepo = roleRepo;
+		this.passwordEncoder = passwordEncoder;
+	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -74,9 +80,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 		return appUserRepo.findAll();
 	}
 
-	public AppUserServiceImpl(AppUserRepo appUserRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder) {
-		this.appUserRepo = appUserRepo;
-		this.roleRepo = roleRepo;
-		this.passwordEncoder = passwordEncoder;
-	}
+	@Override
+	public AppUser updateAppUser(AppUser appUser) {
+		AppUser existingAppUser = appUserRepo.findByUsername(appUser.getUsername().trim());
+		existingAppUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+		return appUserRepo.save(existingAppUser);
+	}	
 }

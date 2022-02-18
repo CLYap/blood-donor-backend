@@ -1,7 +1,6 @@
 package apu.tp055004.bdms.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -57,7 +55,9 @@ public class Donor {
 	private int weight;
 	@Column(name = "donor_height")
 	private int height;
+	@Column(name = "donor_medical_history")
 	private String medicalHistory;
+	@Column(name = "donor_allergy")
 	private String allergy;
 	@Column(name = "donor_contactno")
 	private String contactNo;
@@ -65,7 +65,7 @@ public class Donor {
 	private String email;
 	
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name="fk_userId")
+	@JoinColumn(name="fk_username")
 	private AppUser appUser;
 
 	public Donor() {}

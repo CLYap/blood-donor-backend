@@ -1,6 +1,7 @@
 package apu.tp055004.bdms.api;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import apu.tp055004.bdms.model.DonationHistory;
 import apu.tp055004.bdms.model.Donor;
 import apu.tp055004.bdms.model.Staff;
+import apu.tp055004.bdms.repo.DonationHistoryRepo.MonthlyBloodTypeDonationRecord;
+import apu.tp055004.bdms.repo.DonationHistoryRepo.MonthlyBloodUnitDonationRecord;
+import apu.tp055004.bdms.repo.DonationHistoryRepo.MonthlyDonationRecord;
 import apu.tp055004.bdms.service.DonationHistoryService;
 import apu.tp055004.bdms.service.DonorService;
 import apu.tp055004.bdms.service.StaffService;
@@ -45,16 +49,42 @@ public class DonationHistoryController {
 		return ResponseEntity.created(uri).body(donationHistoryService.saveDonationHistory(donationHistory));		
 	}
 	
-	@GetMapping("/donations")
-	public ResponseEntity<List<DonationHistory>> getDonations() {
-		return ResponseEntity.ok().body(donationHistoryService.getDonationHistories());
-	}
-	
-	@GetMapping("/donations/{donorId}")
+	@GetMapping("/donor/donations/{donorId}")
 	public ResponseEntity<List<DonationHistory>> getDonationsByDonorId(@PathVariable String donorId) {
 		List<DonationHistory> donationHistories = donationHistoryService.getDonationHistories().
 				stream().filter(e -> e.getDonor().getDonorId().equalsIgnoreCase(donorId.trim())).collect(Collectors.toList());
 		return ResponseEntity.ok().body(donationHistories);
 	}
 	
+	@GetMapping("/count/histories/{bloodCentreId}/{year}/{month}")
+	public List<MonthlyDonationRecord> getHistoriesCount(@PathVariable String bloodCentreId, @PathVariable String year, @PathVariable String month) {
+		return donationHistoryService.countHistories()
+				.stream().filter(e-> e.getBloodCentreId().equalsIgnoreCase(bloodCentreId.trim()) && 
+						e.getYear().equals(year.trim()) && e.getMonth().equals(month.trim()))
+				.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/count/histories/bloodtypes/{bloodCentreId}/{year}/{month}")
+	public List<MonthlyBloodTypeDonationRecord> getBloodTypeCount(@PathVariable String bloodCentreId, @PathVariable String year, @PathVariable String month) {
+		return donationHistoryService.countBloodTypes()
+				.stream().filter(e-> e.getBloodCentreId().equalsIgnoreCase(bloodCentreId.trim()) && 
+				e.getYear().equals(year.trim()) && e.getMonth().equals(month.trim()))
+		.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/count/histories/bloodunit/{bloodCentreId}/{year}/{month}")
+	public List<MonthlyBloodUnitDonationRecord> getBloodUnitCount(@PathVariable String bloodCentreId, @PathVariable String year, @PathVariable String month) {
+		return donationHistoryService.countBloodUnit()
+				.stream().filter(e-> e.getBloodCentreId().equalsIgnoreCase(bloodCentreId.trim()) && 
+				e.getYear().equals(year.trim()) && e.getMonth().equals(month.trim()))
+		.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/donor/latest/donation/{donorId}")
+	public DonationHistory getLastestDonation(@PathVariable String donorId) {
+		Date latest =  donationHistoryService.getDonationHistories().stream()
+				.filter(e->e.getDonor().getDonorId().equalsIgnoreCase(donorId.trim()))
+				.map(e -> e.getDate()).max(Date::compareTo).get();
+		return donationHistoryService.getDonationHistories().stream().filter(e -> e.getDate().equals(latest)).collect(Collectors.toList()).get(0);
+	}
 }

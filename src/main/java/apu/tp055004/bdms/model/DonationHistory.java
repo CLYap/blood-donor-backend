@@ -58,7 +58,6 @@ public class DonationHistory {
 		
 	public DonationHistory(Date date, Date time, Donor donor, Staff staff, String bP, double haemoglobinCount,
 			int pulse, int bloodUnit, String covidAntibody) {
-		super();
 		this.date = date;
 		this.time = time;
 		this.donor = donor;

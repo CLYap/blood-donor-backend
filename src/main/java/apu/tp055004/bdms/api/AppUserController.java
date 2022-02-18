@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,6 +93,11 @@ public class AppUserController {
 		} else {
 			throw new RuntimeException("Refresh token is missing");
 		}
+	}
+	
+	@PutMapping("/reset/password")
+	public ResponseEntity<AppUser> resetPassword(@RequestBody AppUser appUser) {
+		return ResponseEntity.ok(appUserService.updateAppUser(appUser));
 	}
 }
 
